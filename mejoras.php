@@ -22,7 +22,7 @@
 
   <!-- Botón Regresar -->
   <div class="fixed top-4 left-[calc(50%-235px)] z-50">
-    <a href="pagina_anterior.php" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-xl shadow-lg">
+    <a href="inicio.php" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-xl shadow-lg">
       🔙 Regresar
     </a>
   </div>
