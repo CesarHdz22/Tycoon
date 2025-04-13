@@ -1,4 +1,9 @@
-<?php include_once('conexion.php'); ?>
+<?php 
+session_start();
+include_once('conexion.php'); 
+$Id_Usuario = $_SESSION['Id_Usuario'];
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,88 +35,22 @@
 
   <h1 class="text-3xl font-bold text-center mt-28 mb-8">Módulos</h1>
 
-  <!-- Cuadros -->
+  <!-- Contenedor -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+    <!-- Cuadros -->
+    <?php
+    
+    ?> 
+    
     <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
       <img src="ruta/a/tu-imagen1.jpg" alt="Opción 1" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion1" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
+      <a href="mejoras.php?mod=<?php  ?>" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
         Opción 1
       </a>
     </div>
 
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="ruta/a/tu-imagen2.jpg" alt="Opción 2" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion2" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 2
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="ruta/a/tu-imagen1.jpg" alt="Opción 1" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion1" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 3
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="ruta/a/tu-imagen2.jpg" alt="Opción 2" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion2" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 4
-      </a>
-    </div>
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="ruta/a/tu-imagen1.jpg" alt="Opción 1" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion1" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 5
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo6.jpg" alt="Opción 2" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion2" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 6
-      </a>
-    </div>
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo7.jpg" alt="Opción 1" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion1" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 7
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo8.jpg" alt="Opción 2" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion2" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 8
-      </a>
-    </div>
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo9.jpg" alt="Opción 1" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion1" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 9
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo10.jpg" alt="Opción 2" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion2" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 10
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo11.jpg" alt="Opción 1" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion1" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 11
-      </a>
-    </div>
-
-    <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">
-      <img src="img/N1/Modulo12.jpg" alt="Opción 2" class="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" />
-      <a href="#opcion2" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-xl font-semibold hover:bg-opacity-70 transition duration-300">
-        Opción 12
-      </a>
-    </div>
+    
 
   </div>
 

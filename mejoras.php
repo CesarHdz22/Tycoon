@@ -37,98 +37,82 @@
   <div class="w-96 bg-gray-800 border-l-4 border-black flex flex-col">
 
     <!-- Tabs con selección visual -->
-    <div class="flex border-b-2 border-black p-4">
-      <label for="tab-mejoras"
-        class="cursor-pointer font-bold text-white px-4 hover:text-green-400 hover:border-b-2 hover:border-green-400 transition-all duration-200">
-        Mejoras
-      </label>
+    <!-- Tabs -->
+<div class="flex border-b-2 border-black p-4">
+  <button onclick="mostrarPanel('mejoras')"
+    class="tab-btn font-bold px-4 text-green-400 border-b-2 border-green-400"
+    id="tab-mejoras">
+    Mejoras
+  </button>
+  <div class="w-px bg-gray-600 mx-2"></div>
+  <button onclick="mostrarPanel('objetivos')"
+    class="tab-btn font-bold px-4 text-white hover:text-blue-400 hover:border-b-2 hover:border-blue-400"
+    id="tab-objetivos">
+    Objetivos
+  </button>
+</div>
 
-      <div class="w-px bg-gray-600 mx-2"></div>
+<!-- Contenido -->
+<div class="flex-1 overflow-y-auto divide-y divide-black">
 
-      <label for="tab-objetivos"
-        class="cursor-pointer font-bold text-white px-4 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 transition-all duration-200">
-        Objetivos
-      </label>
+  <!-- Panel Mejoras -->
+  <div id="panel-mejoras">
+
+  
+    <div class="p-6 bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600">
+      <h3 class="font-bold text-lg mb-1">Mejora 1</h3>
+      <p class="text-sm text-gray-300">Mejora inicial del sistema base.</p>
+      <div class="mt-4 flex justify-end">
+        <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full text-sm">Comprar $150</button>
+      </div>
     </div>
+    <!-- Agrega más mejoras aquí -->
 
-    <!-- Contenido -->
-    <div class="flex-1 overflow-y-auto divide-y divide-black">
 
-      <!-- Panel Mejoras -->
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Mejora 1</h3>
-        <p class="text-sm text-gray-300">Mejora inicial del sistema base.</p>
-        <div class="mt-4 flex justify-end">
-          <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full text-sm">Comprar $150</button>
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Mejora 2</h3>
-        <p class="text-sm text-gray-300">Optimización de recursos de red.</p>
-        <div class="mt-4 flex justify-end">
-          <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full text-sm">Comprar $200</button>
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Mejora 3</h3>
-        <p class="text-sm text-gray-300">Aumento en la velocidad de ejecución.</p>
-        <div class="mt-4 flex justify-end">
-          <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full text-sm">Comprar $250</button>
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Mejora 4</h3>
-        <p class="text-sm text-gray-300">Interfaz gráfica avanzada.</p>
-        <div class="mt-4 flex justify-end">
-          <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full text-sm">Comprar $300</button>
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Mejora 5</h3>
-        <p class="text-sm text-gray-300">Soporte de nuevas tecnologías.</p>
-        <div class="mt-4 flex justify-end">
-          <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full text-sm">Comprar $350</button>
-        </div>
-      </div>
+  </div>
 
-      <!-- Panel Objetivos -->
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Objetivo 1</h3>
-        <p class="text-sm text-gray-300">Completa el tutorial básico.</p>
-        <div class="mt-4 text-right text-green-400 text-sm font-medium">
-          Recompensas: +50 XP, +$100
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Objetivo 2</h3>
-        <p class="text-sm text-gray-300">Configura tu primer módulo.</p>
-        <div class="mt-4 text-right text-green-400 text-sm font-medium">
-          Recompensas: +100 XP, +$200
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Objetivo 3</h3>
-        <p class="text-sm text-gray-300">Integra un nuevo componente.</p>
-        <div class="mt-4 text-right text-green-400 text-sm font-medium">
-          Recompensas: +150 XP, +$300
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Objetivo 4</h3>
-        <p class="text-sm text-gray-300">Realiza una simulación completa.</p>
-        <div class="mt-4 text-right text-green-400 text-sm font-medium">
-          Recompensas: +200 XP, +$400
-        </div>
-      </div>
-      <div class="p-6 min-h-[120px] bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600 transition-all duration-300">
-        <h3 class="font-bold text-lg mb-1">Objetivo 5</h3>
-        <p class="text-sm text-gray-300">Alcanza nivel experto.</p>
-        <div class="mt-4 text-right text-green-400 text-sm font-medium">
-          Recompensas: +250 XP, +$500
-        </div>
-      </div>
+  <!-- Panel Objetivos -->
+  <div id="panel-objetivos" class="hidden">
 
+  
+    <div class="p-6 bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600">
+      <h3 class="font-bold text-lg mb-1">Objetivo 1</h3>
+      <p class="text-sm text-gray-300">Completa el tutorial básico.</p>
+      <div class="mt-4 text-right text-green-400 text-sm font-medium">
+        Recompensas: +50 XP, +$100
+      </div>
     </div>
+    <!-- Agrega más objetivos aquí -->
+
+
+  </div>
+
+</div>
+
+<!-- Script para cambiar paneles -->
+<script>
+  function mostrarPanel(panel) {
+    const mejoras = document.getElementById('panel-mejoras');
+    const objetivos = document.getElementById('panel-objetivos');
+    const tabMejoras = document.getElementById('tab-mejoras');
+    const tabObjetivos = document.getElementById('tab-objetivos');
+
+    if (panel === 'mejoras') {
+      mejoras.classList.remove('hidden');
+      objetivos.classList.add('hidden');
+      tabMejoras.classList.add('text-green-400', 'border-b-2', 'border-green-400');
+      tabObjetivos.classList.remove('text-blue-400', 'border-b-2', 'border-blue-400');
+      tabObjetivos.classList.add('text-white');
+    } else {
+      mejoras.classList.add('hidden');
+      objetivos.classList.remove('hidden');
+      tabObjetivos.classList.add('text-blue-400', 'border-b-2', 'border-blue-400');
+      tabMejoras.classList.remove('text-green-400', 'border-b-2', 'border-green-400');
+      tabMejoras.classList.add('text-white');
+    }
+  }
+</script>
+
 
   </div>
 
