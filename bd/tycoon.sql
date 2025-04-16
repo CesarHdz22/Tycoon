@@ -12,6 +12,7 @@ CREATE TABLE usuarios (
     Id_Usuario INT(11) PRIMARY KEY,
     Username VARCHAR(15),
     Pass VARCHAR(10),
+    correo VARCHAR(100),
     Dinero DOUBLE,
     xp INT(11),
     Id_Nivel INT(11),

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once("conexion.php");
 if(!empty($_POST['username']) && !empty($_POST['password'])){
     $user = $_POST['username'];
@@ -11,11 +12,8 @@ if(!empty($_POST['username']) && !empty($_POST['password'])){
 
     while($row=mysqli_fetch_assoc($resultado)) {
 
-    $id=$row["Id_Usuario"];
-
-    $_SESSION['Id_Usuario']=$id;
+    $_SESSION['Id_Usuario']=$row["Id_Usuario"];
     
-
     }
 
     if($filas > 0 ){
