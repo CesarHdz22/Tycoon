@@ -1,24 +1,33 @@
 <?php
 session_start();
-$idJugador = $_SESSION['Id_Usuario']; // O algo así
+include_once("conexion.php");
 
-$db = new PDO('mysql:host=localhost;dbname=tycoon', 'root', '');
+if (!isset($_SESSION['Id_Usuario'])) {
+    die(json_encode(['error' => 'No autenticado']));
+}
 
-// 1. Obtener datos
-$query = $db->query("SELECT Dinero, produccion_por_segundo, ultima_actualizacion FROM usuarios WHERE id = $idJugador");
-$datos = $query->fetch();
+$idJugador = $_SESSION['Id_Usuario'];
 
+// Obtener datos
+$query = mysqli_query($conexion, 
+    "SELECT Dinero, produccion_por_segundo, ultima_actualizacion 
+    FROM usuarios 
+    WHERE Id_Usuario = $idJugador");
+$datos = mysqli_fetch_assoc($query);
+
+// Cálculos
 $ahora = time();
 $pasado = strtotime($datos['ultima_actualizacion']);
 $generado = $datos['produccion_por_segundo'] * ($ahora - $pasado);
-$nuevoDinero = $datos['dinero'] + $generado;
+$nuevoDinero = $datos['Dinero'] + $generado;
 
-// 2. Guardar nuevos datos
-$db->query("UPDATE usuarios SET Dinero = $nuevoDinero, ultima_actualizacion = NOW() WHERE id = $idJugador");
+// Actualizar
+mysqli_query($conexion, 
+    "UPDATE usuarios 
+    SET Dinero = $nuevoDinero, ultima_actualizacion = NOW() 
+    WHERE Id_Usuario = $idJugador");
 
-// 3. Responder con JSON
+// Respuesta
 header('Content-Type: application/json');
-echo json_encode([
-  'dinero' => round($nuevoDinero)
-]);
+echo json_encode(['dinero' => round($nuevoDinero)]);
 ?>

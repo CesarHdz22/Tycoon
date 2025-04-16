@@ -10,7 +10,7 @@
   <div class="flex items-center justify-center h-full backdrop-brightness-50">
     <div class="bg-black bg-opacity-70 p-8 rounded-2xl shadow-lg w-full max-w-md text-white">
       <h2 class="text-3xl font-semibold text-center mb-6">Iniciar Sesión</h2>
-      <form action="login.php" method="post">
+      <form action="index.php" method="post">
         <div class="mb-4">
           <label for="username" class="block text-sm mb-2">Usuario</label>
           <input type="text" name="username" id="username" class="w-full px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -29,3 +29,31 @@
   </div>
 </body>
 </html>
+
+
+<?php
+session_start();
+include_once("conexion.php");
+if(!empty($_POST['username']) && !empty($_POST['password'])){
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
+
+    $select = "SELECT * FROM usuarios WHERE Username = '$user' AND Pass = '$pass'";
+
+    $resultado=mysqli_query($conexion,$select);
+    $filas=mysqli_num_rows($resultado);
+
+    while($row=mysqli_fetch_assoc($resultado)) {
+
+    $_SESSION['Id_Usuario']=$row["Id_Usuario"];
+    
+    }
+
+    if($filas > 0 ){
+        
+    header('location: inicio.php');
+    }
+
+
+}
+    
