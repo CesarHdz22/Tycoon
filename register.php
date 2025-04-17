@@ -39,7 +39,8 @@ if (empty($errors)) {
 }
 
 if (!empty($errors)) {
-    die(json_encode(['success' => false, 'message' => implode("\n", $errors)]));
+    echo "<script>alert('" . implode("\\n", $errors) . "'); window.history.go(-1);</script>";
+    exit;
 }
 
 // Iniciar transacción
@@ -72,11 +73,11 @@ try {
     // Confirmar transacción
     mysqli_commit($conexion);
     
-    echo json_encode(['success' => true, 'message' => "¡Registro exitoso! Redirigiendo..."]);
+    echo "<script>alert('¡Registro exitoso! Inicia sesión para comenzar.'); window.location.href = 'login.php';</script>";
 
 } catch (Exception $e) {
     mysqli_rollback($conexion);
-    die(json_encode(['success' => false, 'message' => $e->getMessage()]));
+    echo "<script>alert('{$e->getMessage()}'); window.history.go(-1);</script>";
 } finally {
     mysqli_close($conexion);
 }

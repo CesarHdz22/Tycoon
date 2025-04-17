@@ -1,3 +1,4 @@
+
 CREATE DATABASE IF NOT EXISTS tycoon;
 USE tycoon;
 
@@ -31,7 +32,26 @@ CREATE TABLE objetivos (
     xp INT(11)
 );
 
+-- Tabla modulos
+CREATE TABLE modulos (
+    Id_Modulo INT(11) PRIMARY KEY AUTO_INCREMENT,
+    Ventas INT(11),
+    Ganancia_Venta DOUBLE,
+    TiempoVenta TIME,
+    Nombre VARCHAR(20),
+    GananciaTotal DOUBLE,
+    NivelDesbloqueo INT(11)
+);
 
+CREATE TABLE mejoras (
+    Id_Mejora INT(11) PRIMARY KEY AUTO_INCREMENT,
+    Id_Modulo INT(11),
+    Tipo VARCHAR(11),
+    Nombre VARCHAR(90),
+    Descripcion TEXT,
+    Precio INT(11),
+    FOREIGN KEY (Id_Modulo) REFERENCES modulos(Id_Modulo)
+);
 
 -- Tabla objetivos_usuarios (relación muchos a muchos)
 CREATE TABLE objetivos_usuarios (
@@ -43,17 +63,6 @@ CREATE TABLE objetivos_usuarios (
     estado BOOLEAN,
     FOREIGN KEY (Id_Usuario) REFERENCES usuarios(Id_Usuario),
     FOREIGN KEY (Id_objetivos) REFERENCES objetivos(Id_objetivos)
-);
-
--- Tabla modulos
-CREATE TABLE modulos (
-    Id_Modulo INT(11) PRIMARY KEY AUTO_INCREMENT,
-    Ventas INT(11),
-    Ganancia_Venta DOUBLE,
-    TiempoVenta TIME,
-    Nombre VARCHAR(20),
-    GananciaTotal DOUBLE,
-    NivelDesbloqueo INT(11)
 );
 
 -- Tabla datos_jugador (relación usuario-módulo)
@@ -73,10 +82,18 @@ CREATE TABLE datos_jugador (
     FOREIGN KEY (Id_Modulo) REFERENCES modulos(Id_Modulo)
 );
 
---extraer ventas, tiempo ventas y precio 
---DATOS BASE
---MEJORAS, cambian los datos de iempo, costo de venta
---cuando se crea un usuario todos los datos de MODILOS se mete a "datos jugador", se meten los 3 primeros modulos en estado true, cantidad de ventas en 
+CREATE TABLE mejoras_usuarios (
+    Id_MejoraUsuario INT(11) PRIMARY KEY AUTO_INCREMENT,
+    Id_Mejora INT(11),
+    Id_Modulo INT(11),
+    Nombre VARCHAR(90),
+    Descripcion TEXT,
+    Precio INT(11),
+    Estado VARCHAR(30),
+    FOREIGN KEY (Id_Modulo) REFERENCES modulos(Id_Modulo),
+    FOREIGN KEY (Id_Mejora) REFERENCES mejoras(Id_Mejora)
+);
+
 INSERT INTO modulos VALUES
 (1, 0, 5.00, '00:00:05', 'Modulo 1',0.0, 1),
 (2, 0, 10.00, '00:00:06', 'Modulo 2',0.0, 1),
@@ -105,11 +122,10 @@ INSERT INTO niveles VALUES
     (10,7999)
 ;
 
+INSERT INTO 
+
 INSERT INTO usuarios VALUES
     (1,"salbador",1234,"salba@gmail.com",0,0,1),
-    (2,"sexsaar",4321,"magicksistem32@gmail.com",0,0,1)
+    (2,"Magik",4321,"magicksistem32@gmail.com",0,0,1)
 ;
-
-
---en codigo cuando se registre un usuario, se manda a bd se creen los datos de modulos (ARRIBA) y se agrega el id usuario 3 primeros modulos en truw y cantidad de ventas en 0  REGISTER.PHP
 
