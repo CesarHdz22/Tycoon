@@ -85,10 +85,6 @@ CREATE TABLE datos_jugador (
 CREATE TABLE mejoras_usuarios (
     Id_MejoraUsuario INT(11) PRIMARY KEY AUTO_INCREMENT,
     Id_Mejora INT(11),
-    Id_Modulo INT(11),
-    Nombre VARCHAR(90),
-    Descripcion TEXT,
-    Precio INT(11),
     Estado VARCHAR(30),
     FOREIGN KEY (Id_Modulo) REFERENCES modulos(Id_Modulo),
     FOREIGN KEY (Id_Mejora) REFERENCES mejoras(Id_Mejora)
