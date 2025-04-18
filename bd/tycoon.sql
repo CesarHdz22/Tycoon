@@ -90,6 +90,19 @@ CREATE TABLE mejoras_usuarios (
     FOREIGN KEY (Id_Mejora) REFERENCES mejoras(Id_Mejora)
 );
 
+CREATE TABLE mejoras (
+    Id_Mejora INT AUTO_INCREMENT PRIMARY KEY,
+    Id_Modulo INT NOT NULL,
+    Nombre VARCHAR(90) NOT NULL,
+    Descripcion TEXT,
+    Precio DECIMAL(10,2) NOT NULL,
+    Tipo ENUM('velocidad', 'cantidad', 'ganancia') NOT NULL,
+    reduccion_tiempo INT DEFAULT 0,
+    ventas_por_lote INT DEFAULT 1,
+    multiplicador_ganancia DECIMAL(3,1) DEFAULT 1.0,
+    FOREIGN KEY (Id_Modulo) REFERENCES modulos(Id_Modulo)
+);
+
 INSERT INTO modulos VALUES
 (1, 0, 5.00, '00:00:05', 'Modulo 1',0.0, 1),
 (2, 0, 10.00, '00:00:06', 'Modulo 2',0.0, 1),
@@ -125,3 +138,27 @@ INSERT INTO usuarios VALUES
     (2,"Magik",4321,"magicksistem32@gmail.com",0,0,1)
 ;
 
+ALTER TABLE datos_jugador
+ADD COLUMN tiempo_venta TIME DEFAULT '00:00:05',
+ADD COLUMN cantidad_ventas INT DEFAULT 1;
+
+INSERT INTO modulos (Id_Modulo, Nombre, Ganancia_Venta, TiempoVenta, NivelDesbloqueo) VALUES
+(13, 'Módulo 13', 700.00, '00:00:17', 11),
+(14, 'Módulo 14', 1000.00, '00:00:18', 12);
+
+-- Mejoras de ejemplo
+INSERT INTO mejoras (Id_Modulo, Nombre, Descripcion, Precio, Tipo, multiplicador_ganancia, reduccion_tiempo, ventas_por_lote) VALUES
+(1, 'Fábrica Automatizada', 'Reduce tiempo de venta en 2 segundos', 500, 'velocidad', 1.0, 2, 1),
+(1, 'Equipo de Ventas', '+2 ventas por lote', 800, 'cantidad', 1.0, 0, 2),
+(1, 'Material Premium', 'Aumenta ganancia en 20%', 1200, 'ganancia', 1.2, 0, 1);
+
+-- Objetivos de ejemplo
+INSERT INTO objetivos (nombre, descripcion, Id_Modulo, dinero, xp) VALUES
+('Primeras 50 ventas', 'Completa 50 ventas en el Módulo 1', 1, 200, 50),
+('Eficiencia Básica', 'Reduce el tiempo de venta a 3 segundos', 1, 500, 100),
+('Lote de 5', 'Realiza 5 ventas simultáneas', 1, 1000, 200);
+
+INSERT INTO mejoras (Id_Modulo, Nombre, Descripcion, Precio, Tipo, reduccion_tiempo, ventas_por_lote, multiplicador_ganancia) VALUES
+(1, 'Maquinaria rápida', 'Reduce el tiempo de venta en 1 segundo', 500.00, 'velocidad', 1, 1, 1.0),
+(1, 'Equipo de ventas', 'Aumenta a 2 ventas por lote', 800.00, 'cantidad', 0, 2, 1.0),
+(1, 'Material premium', 'Incrementa ganancias en 20%', 1200.00, 'ganancia', 0, 1, 1.2);

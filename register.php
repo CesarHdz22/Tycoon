@@ -58,17 +58,15 @@ try {
     
     $user_id = mysqli_insert_id($conexion);
     
-    // 2. Insertar los 3 primeros módulos
-    $insert_modules = mysqli_query($conexion,
-        "INSERT INTO datos_jugador 
-         (Id_Usuario, Id_Modulo, ventas, ganancia_venta, TiempoVenta, Nombre, GananciaTotal, NivelDesbloqueo, estado, cantidad_ventas)
-         SELECT $user_id, Id_Modulo, 0, Ganancia_Venta, TiempoVenta, Nombre, 0.0, NivelDesbloqueo, TRUE, 0
-         FROM modulos
-         WHERE Id_Modulo IN (1, 2, 3)");
-    
-    if (!$insert_modules) {
-        throw new Exception("Error al asignar módulos: " . mysqli_error($conexion));
-    }
+// Dentro del bloque de inserción de módulos
+$insert_modules = mysqli_query($conexion,
+    "INSERT INTO datos_jugador 
+     (Id_Usuario, Id_Modulo, estado, ventas, ganancia_venta, TiempoVenta, cantidad_ventas)
+     SELECT $user_id, Id_Modulo, 
+            CASE WHEN Id_Modulo <= 3 THEN 1 ELSE 0 END,  -- Primeros 3 activos
+            0, Ganancia_Venta, TiempoVenta, 1
+     FROM modulos
+     WHERE Id_Modulo BETWEEN 1 AND 12");
     
     // Confirmar transacción
     mysqli_commit($conexion);
@@ -81,4 +79,10 @@ try {
 } finally {
     mysqli_close($conexion);
 }
+// Después de crear el usuario, insertar solo el módulo 1 activo
+$insert_modules = mysqli_query($conexion,
+    "INSERT INTO datos_jugador 
+     (Id_Usuario, Id_Modulo, estado, ventas, ganancia_venta, TiempoVenta, cantidad_ventas)
+     VALUES 
+     ($user_id, 1, TRUE, 0, 20, '00:00:05', 1)");
 ?>
