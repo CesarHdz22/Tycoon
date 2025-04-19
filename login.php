@@ -22,7 +22,7 @@ if(!empty($_POST['username']) && !empty($_POST['password'])){
     header('location: inicio.php');
     }
 
-    echo "<script>alert('Usuario Inexistente'); window.history.go(-1);</script>";
+    echo "<script>alert('Usuario Inexistente'); window.history.go(-1);</script>"; 
 }else{
     echo "<script>alert('Favor de llenar todos los datos'); window.history.go(-1);</script>";
 }

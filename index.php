@@ -23,7 +23,7 @@
       </form>
       <p class="text-center text-sm text-gray-400 mt-6">
         ¿No tienes cuenta?
-        <a href="registrar.php" class="text-blue-400 hover:underline">Regístrate aquí</a>
+        <a href="registrar.php" class="text-blue-400 hover:underline">Regístrate aquí</a> 
       </p>
     </div>
   </div>
