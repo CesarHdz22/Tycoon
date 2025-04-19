@@ -18,6 +18,8 @@ $user_data = mysqli_fetch_assoc($result);
 // Obtener ID del módulo
 $modulo_id = isset($_GET['Id_modulo']) ? intval($_GET['Id_modulo']) : 0;
 
+$ruta = $_GET['ruta'];
+
 // Formatear dinero con separadores de miles
 $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
 ?>
@@ -34,7 +36,7 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
 
   <!-- Header fijo izquierda (Dinero) -->
   <div class="fixed top-4 left-4 bg-black bg-opacity-70 px-4 py-2 rounded-xl shadow-lg z-50">
-    <p class="text-lg font-semibold">💰 Dinero: <span id="money"><?= $dinero_formateado ?></span></p>
+    <p class="text-lg font-semibold">💰 Dinero: <span id="dinero"><?= $dinero_formateado ?></span></p>
   </div>
 
   <!-- Header fijo derecha (XP y Nivel) -->
@@ -51,9 +53,9 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
   </div>
 
   <!-- Panel Izquierdo -->
+   
   <div class="flex-grow bg-white text-black flex items-center justify-center">
-    <p class="text-3xl font-bold">IMAGEN EN GRANDE</p>
-    <!-- <img src="modulo_actual.jpg" alt="Imagen Módulo" class="max-w-full max-h-full" /> -->
+    <img src="<?= $ruta ?>" alt="Imagen Módulo" class="max-w-full max-h-full" />
   </div>
 
   <!-- Panel Derecho -->
@@ -91,13 +93,13 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
                     <p class="text-sm text-gray-300"><?= htmlspecialchars($mejora['Descripcion']) ?></p>
                     <div class="mt-2 text-yellow-400 text-sm">
                         <?php if($mejora['reduccion_tiempo'] > 0): ?>
-                            ⏱ -<?= $mejora['reduccion_tiempo'] ?> segundos<br>
+                            ⏱ -<?= $mejora['reduccion_tiempo']/2 ?> segundos<br>
                         <?php endif; ?>
-                        <?php if($mejora['ventas_por_lote'] > 0): ?>
-                            🛒 +<?= $mejora['ventas_por_lote'] ?> ventas/lote<br>
+                        <?php if($mejora['cantidad_ventas'] > 0): ?>
+                            🛒 +<?= $mejora['cantidad_ventas'] ?> ventas/lote<br>
                         <?php endif; ?>
-                        <?php if($mejora['multiplicador_ganancia'] > 1): ?>
-                            💰 x<?= $mejora['multiplicador_ganancia'] ?> ganancia
+                        <?php if($mejora['precio_venta'] > 1): ?>
+                            💰 +<?= $mejora['precio_venta'] ?> ganancia
                         <?php endif; ?>
                     </div>
                     <div class="mt-4 flex justify-between items-center">
@@ -118,13 +120,21 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
 
       <!-- Panel Objetivos -->
       <div id="panel-objetivos" class="hidden">
-        <div class="p-6 bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600">
-          <h3 class="font-bold text-lg mb-1">Objetivo 1</h3>
-          <p class="text-sm text-gray-300">Completa el tutorial básico.</p>
-          <div class="mt-4 text-right text-green-400 text-sm font-medium">
-            Recompensas: +50 XP, +$100
+        <?php
+        $sql = "SELECT * FROM objetivos WHERE Id_Modulo = $modulo_id";
+        $result = mysqli_query($conexion, $sql);
+          while (($mostrar = mysqli_fetch_array($result))) {
+        ?>
+          <div class="p-6 bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600">
+            <h3 class="font-bold text-lg mb-1"><?= $mostrar['nombre'] ?></h3>
+            <p class="text-sm text-gray-300"><?= $mostrar['descripcion'] ?></p>
+            <div class="mt-4 text-right text-green-400 text-sm font-medium">
+              Recompensas: +<?= $mostrar['xp'] ?> XP, +$<?= $mostrar['dinero'] ?>
+            </div>
           </div>
-        </div>
+        <?php
+          }
+        ?>
         <!-- Agrega más objetivos aquí -->
       </div>
     </div>
@@ -132,7 +142,9 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
 
   <!-- Script para cambiar paneles -->
   <script>
-    function mostrarPanel(panel) {
+// Función mejorada para actualizar datos
+
+function mostrarPanel(panel) {
       const mejoras = document.getElementById('panel-mejoras');
       const objetivos = document.getElementById('panel-objetivos');
       const tabMejoras = document.getElementById('tab-mejoras');
@@ -150,16 +162,10 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
         tabObjetivos.classList.add('text-blue-400', 'border-b-2', 'border-blue-400');
         tabMejoras.classList.remove('text-green-400', 'border-b-2', 'border-green-400');
         tabMejoras.classList.add('text-white');
-      }
-    }
+      }
+    }
 
-    // Función para formatear números con separadores de miles
-    function formatNumber(num) {
-        return new Intl.NumberFormat('es-ES').format(num);
-    }
-
-    // Función para comprar mejoras
-    async function comprarMejora(mejoraId, moduloId) {
+async function comprarMejora(mejoraId, moduloId) {
         try {
             const response = await fetch('comprar_mejora.php', {
                 method: 'POST',
@@ -187,46 +193,19 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
             
         } catch (error) {
             console.error('Error:', error);
-        }
-    }
+        }
+    }
 
-    // Función para actualizar los datos del jugador
-    async function actualizarDatos() {
-      try {
-        const response = await fetch('obtenerdatoss.php');
-        
-        if (!response.ok) {
-          throw new Error('Error en la respuesta del servidor');
-        }
-        
-        const data = await response.json();
-        
-        // Actualizar los elementos en la página
-        if (data.Dinero !== undefined) {
-          document.getElementById('money').textContent = formatNumber(data.Dinero);
-        }
-        if (data.xp !== undefined) {
-          document.getElementById('xp').textContent = data.xp;
-        }
-        if (data.id_nivel !== undefined) {
-          document.getElementById('level').textContent = data.id_nivel;
-        }
-        
-      } catch (error) {
-        console.error('Error al actualizar datos:', error);
+setInterval(() => {
+  fetch("obtenerdatoss.php")
+    .then(response => response.json())
+    .then(data => {
+      if (!data.error) {
+        document.getElementById("dinero").innerText = `$${data.dinero}`;
+        document.getElementById("xp").innerText = `${data.xp} XP`;
       }
-    }
-
-    // Actualizar inmediatamente al cargar
-    document.addEventListener('DOMContentLoaded', actualizarDatos);
-    
-    // Configurar intervalo de actualización cada 1 segundo
-    const intervalo = setInterval(actualizarDatos, 1000);
-    
-    // Limpiar intervalo cuando la página se cierre o navegue
-    window.addEventListener('beforeunload', () => {
-        clearInterval(intervalo);
     });
-  </script>
+}, 500); // Actualiza cada medio segundo
+</script>
 </body>
 </html>
