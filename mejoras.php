@@ -65,7 +65,7 @@ function calcularPorcentajeNivel($user_data) {
   <!-- Header fijo derecha (XP y Nivel) -->
   <div class="fixed top-4 right-[400px] bg-black bg-opacity-70 px-4 py-2 rounded-xl shadow-lg z-50">
     <p class="text-lg font-semibold">🧠 XP: <span id="xp"><?= $user_data['xp'] ?></span></p>
-    <p class="text-lg font-semibold">📈 Nivel: <span id="level"><?= $user_data['nivel_calculado'] ?? 1 ?></span></p>
+    <p class="text-lg font-semibold">📈 Nivel: <span id="level"><?= $user_data['nivel'] ?? 1 ?></span></p>
     <div class="w-full bg-gray-600 rounded-full h-2.5 mt-1">
         <div class="bg-blue-600 h-2.5 rounded-full" 
              style="width: <?= calcularPorcentajeNivel($user_data) ?>%"></div>
@@ -266,7 +266,7 @@ function calcularPorcentajeNivel($user_data) {
         .catch(error => console.error('Error:', error));
     }
 
-    // Actualizar dinero/XP cada 2 segundos
+    
     setInterval(() => {
       fetch("obtenerdatoss.php")
         .then(response => response.json())
@@ -274,11 +274,12 @@ function calcularPorcentajeNivel($user_data) {
           if (!data.error) {
             document.getElementById("dinero").textContent = data.dinero;
             document.getElementById("xp").textContent = data.xp;
+            document.getElementById("level").textContent = data.nivel;
           }
         });
     }, 2000);
 
-    // Verificar objetivos cada 5 segundos
+    
     setInterval(verificarObjetivos, 5000);
     window.addEventListener('load', verificarObjetivos);
   </script>

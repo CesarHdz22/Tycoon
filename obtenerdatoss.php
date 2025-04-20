@@ -10,7 +10,7 @@ if (!$id_usuario) {
 }
 
 // Obtener datos del usuario: dinero, xp y ciclos
-$queryUsuario = "SELECT Dinero, xp, ciclos FROM usuarios WHERE Id_Usuario = ?";
+$queryUsuario = "SELECT Dinero, xp, ciclos, Nivel FROM usuarios WHERE Id_Usuario = ?";
 $stmt = $conexion->prepare($queryUsuario);
 $stmt->bind_param("i", $id_usuario);
 $stmt->execute();
@@ -24,7 +24,8 @@ if ($resultadoUsuario->num_rows === 0) {
 $usuario = $resultadoUsuario->fetch_assoc();
 $dinero = $usuario['Dinero'];
 $xp = $usuario['xp'];
-$ciclos = $usuario['ciclos'] + 1; // Incrementar ciclos globales
+$ciclos = $usuario['ciclos'] + 1; 
+$nivel = $usuario['Id_Nivel'];
 
 // Obtener módulos activos del jugador
 $queryModulos = "SELECT * FROM datos_jugador WHERE Id_Usuario = ? AND estado = 1";
@@ -67,6 +68,7 @@ while ($modulo = $modulos->fetch_assoc()) {
                 // Actualizar el dinero y XP del jugador
                 $dinero += $dinerorecompensa;
                 $xp += $xpRecompensa;
+                $nivelActual = $nivel;
 
                 // Marcar el objetivo como cumplido
                 $query = "INSERT INTO objetivos_usuarios (Id_Usuario, Id_objetivos, estado) VALUES (?, ?, 1)";
@@ -91,5 +93,6 @@ echo json_encode([
     'dinero' => round($dinero, 2),
     'xp' => $xp,
     'ciclos' => $ciclos
+    'nivel' => $nivelActual;
 ]);
 ?>

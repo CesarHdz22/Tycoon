@@ -77,19 +77,19 @@ while (($mostrar = mysqli_fetch_array($result)) && $contador <= 12) {
   $nivelJugador = $mostrar['NivelUsuario'];
   $nivelModulo = $mostrar['Nivel'];
 
-  // Lógica para imagen y texto del botón
+
   if ($nivelJugador < $nivelDesbloqueo) {
     $rutaImagen = "img/default.png";
     $textoModulo = "Bloqueado";
-    $enlace = "javascript:void(0)"; // Deshabilitar enlace
+    $enlace = "javascript:void(0)";
   } elseif ($nivelModulo == 0) {
     $rutaImagen = "img/default2.png";
     $textoModulo = "Desbloquear";
-    $enlace = "mejoras.php?Id_modulo=$contador&ruta=$rutaImagen"; // Enlace habilitado
+    $enlace = "mejoras.php?Id_modulo=$contador&ruta=$rutaImagen"; 
   } else {
-    $rutaImagen = "img/N$nivelModulo/Modulo$contador.jpg";
+    $rutaImagen = "img/N1/Modulo$contador.png";
     $textoModulo = "Módulo $contador";
-    $enlace = "mejoras.php?Id_modulo=$contador&ruta=$rutaImagen"; // Enlace habilitado
+    $enlace = "mejoras.php?Id_modulo=$contador&ruta=$rutaImagen"; 
   }
 ?>
   <div class="relative border-2 border-gray-700 rounded-xl overflow-hidden group">

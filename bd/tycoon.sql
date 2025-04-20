@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-04-2025 a las 07:09:28
+-- Tiempo de generación: 20-04-2025 a las 20:58:09
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -47,9 +47,9 @@ CREATE TABLE `datos_jugador` (
 --
 
 INSERT INTO `datos_jugador` (`Id`, `Id_Usuario`, `Id_Modulo`, `ventas`, `ganancia_venta`, `CiclosVenta`, `GananciaTotal`, `NivelDesbloqueo`, `estado`, `cantidad_ventas`, `Precio`, `Nivel`) VALUES
-(46, 7, 1, 101, 10, 60, 0, 1, 1, 1, 200, 1),
-(47, 7, 2, 48, 24, 120, 0, 1, 1, 1, 300, 1),
-(48, 7, 3, 10, 40, 180, 0, 1, 1, 1, 500, 1),
+(46, 7, 1, 102, 10, 60, 0, 1, 1, 1, 200, 1),
+(47, 7, 2, 49, 24, 120, 0, 1, 1, 1, 300, 1),
+(48, 7, 3, 11, 40, 180, 0, 1, 1, 1, 500, 1),
 (49, 7, 4, 0, 70, 240, 0, 3, 0, 0, 1500, 0),
 (50, 7, 5, 0, 124, 300, 0, 4, 0, 0, 3000, 0),
 (51, 7, 6, 0, 185, 360, 0, 5, 0, 0, 5000, 0),
@@ -58,7 +58,19 @@ INSERT INTO `datos_jugador` (`Id`, `Id_Usuario`, `Id_Modulo`, `ventas`, `gananci
 (54, 7, 9, 0, 400, 540, 0, 8, 0, 0, 15000, 0),
 (55, 7, 10, 0, 550, 600, 0, 9, 0, 0, 20000, 0),
 (56, 7, 11, 0, 700, 660, 0, 10, 0, 0, 35000, 0),
-(57, 7, 12, 0, 1000, 720, 0, 10, 0, 0, 50000, 0);
+(57, 7, 12, 0, 1000, 720, 0, 10, 0, 0, 50000, 0),
+(61, 8, 1, 0, 10, 60, 0, 1, 1, 0, 200, 0),
+(62, 8, 2, 0, 24, 120, 0, 1, 1, 0, 300, 0),
+(63, 8, 3, 0, 40, 180, 0, 1, 1, 0, 500, 0),
+(64, 8, 4, 0, 70, 240, 0, 3, 0, 0, 1500, 0),
+(65, 8, 5, 0, 124, 300, 0, 4, 0, 0, 3000, 0),
+(66, 8, 6, 0, 185, 360, 0, 5, 0, 0, 5000, 0),
+(67, 8, 7, 0, 248, 420, 0, 6, 0, 0, 8000, 0),
+(68, 8, 8, 0, 325, 480, 0, 7, 0, 0, 10500, 0),
+(69, 8, 9, 0, 400, 540, 0, 8, 0, 0, 15000, 0),
+(70, 8, 10, 0, 550, 600, 0, 9, 0, 0, 20000, 0),
+(71, 8, 11, 0, 700, 660, 0, 10, 0, 0, 35000, 0),
+(72, 8, 12, 0, 1000, 720, 0, 10, 0, 0, 50000, 0);
 
 -- --------------------------------------------------------
 
@@ -326,7 +338,28 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`Id_Usuario`, `Username`, `Pass`, `correo`, `Dinero`, `xp`, `Id_Nivel`, `ciclos`) VALUES
-(7, 'MagikSystem22', '1234', 'magiksystem22@gmail.com', 1262, 0, 1, 6062);
+(7, 'MagikSystem22', '1234', 'magiksystem22@gmail.com', 1336, 8000, 10, 6143),
+(8, '2330085', '1234', 'cesarhdz782@gmail.com', 0, 0, 1, 0);
+
+--
+-- Disparadores `usuarios`
+--
+DELIMITER $$
+CREATE TRIGGER `actualizar_nivel_xp` BEFORE UPDATE ON `usuarios` FOR EACH ROW BEGIN
+    
+    IF OLD.xp <> NEW.xp THEN
+    
+        SET NEW.Id_Nivel = (
+            SELECT id_nivel 
+            FROM niveles 
+            WHERE NEW.xp >= xp 
+            ORDER BY xp DESC 
+            LIMIT 1
+        );
+    END IF;
+END
+$$
+DELIMITER ;
 
 --
 -- Índices para tablas volcadas
@@ -397,7 +430,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `datos_jugador`
 --
 ALTER TABLE `datos_jugador`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT de la tabla `mejoras`
@@ -439,7 +472,7 @@ ALTER TABLE `objetivos_usuarios`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `Id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `Id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas

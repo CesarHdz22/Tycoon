@@ -5,7 +5,6 @@ include("conexion.php");
 $Id_Usuario = $_SESSION['Id_Usuario'];
 $Id_Modulo = $_GET['Id_Modulo'];
 
-// Verifica que el usuario tenga dinero suficiente
 $sql = "SELECT Dinero FROM usuarios WHERE Id_Usuario = ?";
 $stmt = $conexion->prepare($sql);
 $stmt->bind_param("i", $Id_Usuario);
@@ -23,12 +22,12 @@ $stmt->fetch();
 $stmt->close();
 
 if ($dinero >= $precio) {
-  // Descontar el dinero y aumentar nivel
+  
   $conexion->query("UPDATE usuarios SET Dinero = Dinero - $precio WHERE Id_Usuario = $Id_Usuario");
   $conexion->query("UPDATE datos_jugador SET cantidad_ventas = 1, Nivel = 1 WHERE Id_Usuario = $Id_Usuario AND Id_Modulo = $Id_Modulo");
 
-  header("Location: inicio.php"); // o a donde quieras redirigir
+  header("Location: inicio.php"); 
 } else {
-  echo "Dinero insuficiente.";
+  header("Location: inicio.php"); 
 }
 ?>

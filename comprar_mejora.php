@@ -1,9 +1,4 @@
-<script>
-  if (!sessionStorage.getItem("recargado")) {
-    sessionStorage.setItem("recargado", "true");
-    window.location.reload();
-  }
-</script>
+
 <?php
 session_start();
 include('conexion.php');
@@ -63,5 +58,6 @@ mysqli_query($conexion,
 // 7. Registrar la mejora comprada
 
 if (mysqli_query($conexion,"INSERT INTO mejoras_usuarios (Id_Usuario, Id_Mejora, estado) VALUES ($id_usuario, $mejora_id, 1)")) {
-    echo "<script>alert('Mejora aplicada con exito '); window.history.go(-1);</script>" ;
+
+    header("location: mejoras.php?Id_modulo=$moduloId&ruta=img/N1/Modulo$moduloId.png");
 }
