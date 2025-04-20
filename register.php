@@ -44,7 +44,7 @@ try {
     // Insertar usuario
     $stmt = mysqli_prepare($conexion,
         "INSERT INTO usuarios (Username, Pass, correo, Dinero, xp, Id_Nivel, ciclos) 
-         VALUES (?, ?, ?, 0, 0, 1, 0)");
+         VALUES (?, ?, ?, 1000, 0, 1, 0)");
     mysqli_stmt_bind_param($stmt, "sss", $username, $password, $email);
     mysqli_stmt_execute($stmt);
     $user_id = mysqli_insert_id($conexion);
@@ -72,4 +72,6 @@ try {
 } finally {
     mysqli_close($conexion);
 }
+
+
 ?>

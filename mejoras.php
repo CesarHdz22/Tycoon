@@ -82,7 +82,11 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
       <div id="panel-mejoras">
         <?php
         // Obtener mejoras del módulo actual
-        $query_mejoras = "SELECT * FROM mejoras WHERE Id_Modulo = $modulo_id";
+        $query_mejoras = "SELECT m.* 
+                  FROM mejoras m
+                  LEFT JOIN mejoras_usuarios mu ON m.Id_Mejora = mu.Id_Mejora AND mu.Id_Usuario = {$_SESSION['Id_Usuario']}
+                  WHERE m.Id_Modulo = $modulo_id 
+                  AND mu.Id_MejoraUsuario IS NULL";
         $result_mejoras = mysqli_query($conexion, $query_mejoras);
         
         if (mysqli_num_rows($result_mejoras) > 0) {
@@ -118,23 +122,7 @@ $dinero_formateado = number_format($user_data['Dinero'], 0, ',', '.');
         ?>
       </div>
 
-      <!-- Panel Objetivos -->
-      <div id="panel-objetivos" class="hidden">
-        <?php
-        $sql = "SELECT * FROM objetivos WHERE Id_Modulo = $modulo_id";
-        $result = mysqli_query($conexion, $sql);
-          while (($mostrar = mysqli_fetch_array($result))) {
-        ?>
-          <div class="p-6 bg-gray-700 rounded-xl m-4 shadow-md hover:bg-gray-600">
-            <h3 class="font-bold text-lg mb-1"><?= $mostrar['nombre'] ?></h3>
-            <p class="text-sm text-gray-300"><?= $mostrar['descripcion'] ?></p>
-            <div class="mt-4 text-right text-green-400 text-sm font-medium">
-              Recompensas: +<?= $mostrar['xp'] ?> XP, +$<?= $mostrar['dinero'] ?>
-            </div>
-          </div>
-        <?php
-          }
-        ?>
+
         <!-- Agrega más objetivos aquí -->
       </div>
     </div>
@@ -166,35 +154,22 @@ function mostrarPanel(panel) {
     }
 
 async function comprarMejora(mejoraId, moduloId) {
-        try {
-            const response = await fetch('comprar_mejora.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mejora_id: mejoraId,
-                    modulo_id: moduloId
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.error) {
-                alert(result.error);
-                return;
-            }
-            
-            // Actualizar dinero en tiempo real
-            document.getElementById('money').textContent = 
-                formatNumber(result.nuevoDinero);
-            
-            alert('¡Mejora aplicada con éxito!');
-            
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    try {
+        // No await here - fire and forget
+        fetch('comprar_mejora.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                mejora_id: mejoraId,
+                modulo_id: moduloId
+            })
+        });        
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+    }
+}
 
 setInterval(() => {
   fetch("obtenerdatoss.php")

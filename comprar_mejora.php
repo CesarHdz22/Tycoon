@@ -1,3 +1,9 @@
+<script>
+  if (!sessionStorage.getItem("recargado")) {
+    sessionStorage.setItem("recargado", "true");
+    window.location.reload();
+  }
+</script>
 <?php
 session_start();
 include('conexion.php');
@@ -5,62 +11,57 @@ include('conexion.php');
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['Id_Usuario'])) {
-    echo json_encode(['error' => 'No autenticado']);
+    echo json_encode(['success' => false, 'error' => 'No autenticado']);
     exit;
 }
+
+$id_usuario = $_SESSION['Id_Usuario'];
+
 
 $data = json_decode(file_get_contents('php://input'), true);
 $mejora_id = intval($data['mejora_id']);
 $modulo_id = intval($data['modulo_id']);
 
-try {
-    // Obtener datos de la mejora
-    $stmt = $conexion->prepare("SELECT * FROM mejoras WHERE Id_Mejora = ?");
-    $stmt->bind_param("i", $mejora_id);
-    $stmt->execute();
-    $mejora = $stmt->get_result()->fetch_assoc();
-
-    // Verificar si el usuario puede comprarla
-    $stmt = $conexion->prepare("SELECT Dinero FROM usuarios WHERE Id_Usuario = ?");
-    $stmt->bind_param("i", $_SESSION['Id_Usuario']);
-    $stmt->execute();
-    $dinero = $stmt->get_result()->fetch_row()[0];
-
-    if ($dinero < $mejora['Precio']) {
-        throw new Exception("Fondos insuficientes");
-    }
-
-    // Aplicar mejora
-    $conexion->begin_transaction();
-
-    // Actualizar módulo
-    $update = "UPDATE datos_jugador SET 
-                ganancia_venta = ganancia_venta * ?,
-                tiempo_venta = ADDTIME(tiempo_venta, ?),
-                cantidad_ventas = cantidad_ventas + ?
-               WHERE Id_Usuario = ? AND Id_Modulo = ?";
-    
-    $stmt = $conexion->prepare($update);
-    $stmt->bind_param("dssii", 
-        $mejora['multiplicador_ganancia'],
-        '-' . $mejora['reduccion_tiempo'] . ' SECONDS',
-        $mejora['ventas_por_lote'],
-        $_SESSION['Id_Usuario'],
-        $modulo_id
-    );
-    $stmt->execute();
-
-    // Descontar dinero
-    $stmt = $conexion->prepare("UPDATE usuarios SET Dinero = Dinero - ? WHERE Id_Usuario = ?");
-    $stmt->bind_param("di", $mejora['Precio'], $_SESSION['Id_Usuario']);
-    $stmt->execute();
-
-    $conexion->commit();
-
-    echo json_encode(['success' => true, 'nuevoDinero' => $dinero - $mejora['Precio']]);
-
-} catch (Exception $e) {
-    $conexion->rollback();
-    echo json_encode(['error' => $e->getMessage()]);
+// 1. Verificar si el usuario ya tiene esta mejora
+$check = mysqli_query($conexion, 
+    "SELECT * FROM mejoras_usuarios 
+     WHERE Id_Usuario = $id_usuario AND Id_Mejora = $mejora_id");
+     
+if (mysqli_num_rows($check) > 0) {
+    echo json_encode(['success' => false, 'error' => 'Ya posees esta mejora']);
+    exit;
 }
-?>
+
+// 2. Obtener datos de la mejora
+$mejora = mysqli_fetch_assoc(mysqli_query($conexion,
+    "SELECT * FROM mejoras WHERE Id_Mejora = $mejora_id"));
+$datos_jugador = mysqli_fetch_assoc(mysqli_query($conexion,
+    "SELECT * FROM datos_jugador WHERE Id_Usuario = $mejora_id"));
+// 3. Verificar si tiene dinero suficiente
+$usuario = mysqli_fetch_assoc(mysqli_query($conexion,
+    "SELECT Dinero FROM usuarios WHERE Id_Usuario = $id_usuario"));
+
+if ($usuario['Dinero'] < $mejora['Precio']) {
+    echo json_encode(['success' => false, 'error' => 'Fondos insuficientes']);
+    exit;
+}
+
+
+
+// 5. Actualizar módulo del usuario
+mysqli_query($conexion,
+    "UPDATE datos_jugador SET 
+    ganancia_venta = ganancia_venta+{$mejora['precio_venta']}, CiclosVenta = CiclosVenta-{$mejora['reduccion_tiempo']}, cantidad_ventas = cantidad_ventas+{$mejora['cantidad_ventas']},Nivel = Nivel+1
+     WHERE Id_Usuario = $id_usuario AND Id_Modulo = $modulo_id");
+
+// 6. Descontar dinero
+mysqli_query($conexion,
+    "UPDATE usuarios SET 
+     Dinero = Dinero - {$mejora['Precio']}
+     WHERE Id_Usuario = $id_usuario");
+
+// 7. Registrar la mejora comprada
+
+if (mysqli_query($conexion,"INSERT INTO mejoras_usuarios (Id_Usuario, Id_Mejora, estado) VALUES ($id_usuario, $mejora_id, 1)")) {
+    echo "<script>alert('Mejora aplicada con exito '); window.history.go(-1);</script>" ;
+}

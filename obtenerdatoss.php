@@ -51,6 +51,32 @@ while ($modulo = $modulos->fetch_assoc()) {
         $stmtUpdate = $conexion->prepare($updateModulo);
         $stmtUpdate->bind_param("ii", $ventas, $id_dato);
         $stmtUpdate->execute();
+
+        //comprobar si el jugador ha obtentido un objetivo
+        $queryObjetivo = "SELECT * FROM objetivos WHERE Id_Modulo = ? ";
+        $stmtObjetivo = $conexion->prepare($queryObjetivo);
+        $stmtObjetivo->bind_param("i", $id_dato);
+        $stmtObjetivo->execute();
+        $resultadoObjetivo = $stmtObjetivo->get_result();
+        while ($objetivos = $resultadoObjetivo->fetch_assoc()) {
+            $requisito = $objetivos['ventas'];
+            $dinerorecompensa = $objetivos['dinero'];
+            $xpRecompensa = $objetivos['xp'];
+            $id_objetivo = $objetivos['Id_objetivos'];
+            if ($ventas >= $requisito) {
+                // Actualizar el dinero y XP del jugador
+                $dinero += $dinerorecompensa;
+                $xp += $xpRecompensa;
+
+                // Marcar el objetivo como cumplido
+                $query = "INSERT INTO objetivos_usuarios (Id_Usuario, Id_objetivos, estado) VALUES (?, ?, 1)";
+                $stmt = $conexion->prepare($query);
+                $stmt->bind_param("ii", $id_usuario, $id_objetivo);
+                $stmt->execute();
+            }
+        }
+
+
     }
 }
 
